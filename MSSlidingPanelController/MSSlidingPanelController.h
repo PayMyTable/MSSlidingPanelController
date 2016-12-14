@@ -34,21 +34,21 @@
  */
 typedef NS_ENUM(NSUInteger, MSSPCenterViewInteraction)
 {
-    /**
-     *  There is no interaction with the center view.
-     */
-    MSSPCenterViewInteractionNone,
-    
-    /**
-     *  The user can interact only with the navigation bar of the center view.
-     *  If there is no navigation bar, no interaction with the center view are possible.
-     */
-    MSSPCenterViewInteractionNavBar,
-    
-    /**
-     *  The user can interact view all the center view.
-     */
-    MSSPCenterViewInteractionFullView,
+  /**
+   *  There is no interaction with the center view.
+   */
+  MSSPCenterViewInteractionNone,
+  
+  /**
+   *  The user can interact only with the navigation bar of the center view.
+   *  If there is no navigation bar, no interaction with the center view are possible.
+   */
+  MSSPCenterViewInteractionNavBar,
+  
+  /**
+   *  The user can interact view all the center view.
+   */
+  MSSPCenterViewInteractionFullView,
 };
 
 /**
@@ -56,38 +56,38 @@ typedef NS_ENUM(NSUInteger, MSSPCenterViewInteraction)
  */
 typedef NS_OPTIONS(NSUInteger, MSSPCloseGestureMode)
 {
-    /**
-     *  No gesture are used.
-     */
-    MSSPCloseGestureModeNone        =   0,
-    
-    /**
-     *  The user can slide the content part of the central view.
-     */
-    MSSPCloseGestureModePanContent  =   1 << 0,
-    
-    /**
-     *  The user can slide the nav bar of the central view.
-     */
-    MSSPCloseGestureModePanNavBar   =   1 << 1,
-    
-    /**
-     *  The user can tap the content part of the central view.
-     */
-    MSSPCloseGestureModeTapContent  =   1 << 2,
-    
-    /**
-     *  The user can tap the nav bar of the central view.
-     */
-    MSSPCloseGestureModeTapNavBar   =   1 << 3,
-    
-    /**
-     *  The user can use every previous gestures.
-     */
-    MSSPCloseGestureModeAll         =   MSSPCloseGestureModePanContent  |
-                                        MSSPCloseGestureModePanNavBar   |
-                                        MSSPCloseGestureModeTapContent  |
-                                        MSSPCloseGestureModeTapNavBar,
+  /**
+   *  No gesture are used.
+   */
+  MSSPCloseGestureModeNone        =   0,
+  
+  /**
+   *  The user can slide the content part of the central view.
+   */
+  MSSPCloseGestureModePanContent  =   1 << 0,
+  
+  /**
+   *  The user can slide the nav bar of the central view.
+   */
+  MSSPCloseGestureModePanNavBar   =   1 << 1,
+  
+  /**
+   *  The user can tap the content part of the central view.
+   */
+  MSSPCloseGestureModeTapContent  =   1 << 2,
+  
+  /**
+   *  The user can tap the nav bar of the central view.
+   */
+  MSSPCloseGestureModeTapNavBar   =   1 << 3,
+  
+  /**
+   *  The user can use every previous gestures.
+   */
+  MSSPCloseGestureModeAll         =   MSSPCloseGestureModePanContent  |
+  MSSPCloseGestureModePanNavBar   |
+  MSSPCloseGestureModeTapContent  |
+  MSSPCloseGestureModeTapNavBar,
 };
 
 /**
@@ -95,26 +95,26 @@ typedef NS_OPTIONS(NSUInteger, MSSPCloseGestureMode)
  */
 typedef NS_OPTIONS(NSUInteger, MSSPOpenGestureMode)
 {
-    /**
-     *  No gesture are used.
-     */
-    MSSPOpenGestureModeNone         =   0,
-    
-    /**
-     *  The user can slide the content part of the central view.
-     */
-    MSSPOpenGestureModePanContent   =   1 << 0,
-    
-    /**
-     *  The user can slide the nav bar of the central view.
-     */
-    MSSPOpenGestureModePanNavBar    =   1 << 1,
-    
-    /**
-     *  The user can use every previous gestures.
-     */
-    MSSPOpenGestureModeAll          =   MSSPOpenGestureModePanContent   |
-                                        MSSPOpenGestureModePanNavBar,
+  /**
+   *  No gesture are used.
+   */
+  MSSPOpenGestureModeNone         =   0,
+  
+  /**
+   *  The user can slide the content part of the central view.
+   */
+  MSSPOpenGestureModePanContent   =   1 << 0,
+  
+  /**
+   *  The user can slide the nav bar of the central view.
+   */
+  MSSPOpenGestureModePanNavBar    =   1 << 1,
+  
+  /**
+   *  The user can use every previous gestures.
+   */
+  MSSPOpenGestureModeAll          =   MSSPOpenGestureModePanContent   |
+  MSSPOpenGestureModePanNavBar,
 };
 
 /**
@@ -122,20 +122,20 @@ typedef NS_OPTIONS(NSUInteger, MSSPOpenGestureMode)
  */
 typedef NS_ENUM(NSUInteger, MSSPSideDisplayed)
 {
-    /**
-     *  No panel is displayed.
-     */
-    MSSPSideDisplayedNone,
-    
-    /**
-     *  The left panel is displayed.
-     */
-    MSSPSideDisplayedLeft,
-    
-    /**
-     *  The right panel is displayed.
-     */
-    MSSPSideDisplayedRight,
+  /**
+   *  No panel is displayed.
+   */
+  MSSPSideDisplayedNone,
+  
+  /**
+   *  The left panel is displayed.
+   */
+  MSSPSideDisplayedLeft,
+  
+  /**
+   *  The right panel is displayed.
+   */
+  MSSPSideDisplayedRight,
 };
 
 #pragma mark - Protocol declaration
@@ -146,12 +146,9 @@ typedef NS_ENUM(NSUInteger, MSSPSideDisplayed)
 
 /**
  *  The MSSlidingPanelController provides a class which allow to display sliding panels.
- *  
+ *
  *  The sliding panel controller allows to set two panels: one on the left, and one on the right. However, only one panel can be displayed at the same time.
  *  If you want to use the Storyboard, use custom segues with the following identifiers: MSSPStoryboardIDCenter, MSSPStoryboardIDLeft, MSSPStoryboardIDRight.
- *
- *  MSSlidingPanelController shouldn't be installed as a child of another view controller. Even if you have the possibility to do it, you can encounter conflicts between containers.
- *
  */
 @interface MSSlidingPanelController : UIViewController
 
@@ -203,7 +200,7 @@ typedef NS_ENUM(NSUInteger, MSSPSideDisplayed)
 
 /**
  *  The center view controller.
- *  
+ *
  *  By default, this value is `nil`.
  */
 @property (nonatomic, strong)           UIViewController                        *centerViewController;
@@ -242,7 +239,7 @@ typedef NS_ENUM(NSUInteger, MSSPSideDisplayed)
 /**
  *  The gestures which allow to open the left panel.
  *
- *  By default, this value is `MSSPOpenGestureModeAll`.
+ *  By default, this value is `MSSPOpenGestureModeNone`.
  */
 @property (nonatomic, assign)           MSSPOpenGestureMode                     leftPanelOpenGestureMode;
 
@@ -302,7 +299,7 @@ typedef NS_ENUM(NSUInteger, MSSPSideDisplayed)
 /**
  *  The gestures which allow to open the right panel.
  *
- *  By default, this value is `MSSPOpenGestureModeAll`.
+ *  By default, this value is `MSSPOpenGestureModeNone`.
  */
 @property (nonatomic, assign)           MSSPOpenGestureMode                     rightPanelOpenGestureMode;
 
@@ -359,12 +356,14 @@ typedef NS_ENUM(NSUInteger, MSSPSideDisplayed)
  */
 - (void)closePanel;
 
+- (void)closePanelAnimated:(BOOL)animated;
+
 /**
  *  Close the opened panel.
  *
  *  @param completion A block object to be executed when the panel is closed.
  */
-- (void)closePanelWithCompletion:(void (^)(void))completion;
+- (void)closePanelWithCompletion:(void (^)(void))completion animated:(BOOL)animated;
 
 /**
  *  Open the left panel.

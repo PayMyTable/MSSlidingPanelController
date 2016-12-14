@@ -41,18 +41,18 @@
  */
 - (MSSlidingPanelController *)slidingPanelController
 {
-    UIViewController    *parentViewController;
+  UIViewController    *parentViewController;
+  
+  parentViewController = [self parentViewController];
+  while (parentViewController)
+  {
+    if ([parentViewController isKindOfClass:[MSSlidingPanelController class]])
+      return ((MSSlidingPanelController *) parentViewController);
     
-    parentViewController = [self parentViewController];
-    while (parentViewController)
-    {
-        if ([parentViewController isKindOfClass:[MSSlidingPanelController class]])
-            return ((MSSlidingPanelController *) parentViewController);
-        
-        parentViewController = [parentViewController parentViewController];
-    }
-    
-    return (nil);
+    parentViewController = [parentViewController parentViewController];
+  }
+  
+  return (nil);
 }
 
 @end

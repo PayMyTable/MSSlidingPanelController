@@ -45,15 +45,15 @@ NSUInteger  g_panelMaximumWidth = 280;
  */
 typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
 {
-    /**
-     *  The original panning touch began in the content part of the center view.
-     */
-    MSSPPanTouchLocationContent = MSSPOpenGestureModePanContent,
-    
-    /**
-     *  The original panning touch began in the navigation bar of the center view.
-     */
-    MSSPPanTouchLocationNavBar = MSSPOpenGestureModePanNavBar,
+  /**
+   *  The original panning touch began in the content part of the center view.
+   */
+  MSSPPanTouchLocationContent = MSSPOpenGestureModePanContent,
+  
+  /**
+   *  The original panning touch began in the navigation bar of the center view.
+   */
+  MSSPPanTouchLocationNavBar = MSSPOpenGestureModePanNavBar,
 };
 
 #pragma mark - Interfaces
@@ -401,28 +401,28 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    UIView  *hitView;
+  UIView  *hitView;
+  
+  hitView = [super hitTest:point withEvent:event];
+  
+  if ([[self slidingPanelController] sideDisplayed] == MSSPSideDisplayedLeft)
+  {
+    if ([[self slidingPanelController] leftPanelCenterViewInteractionMode] == MSSPCenterViewInteractionNone)
+      return (nil);
     
-    hitView = [super hitTest:point withEvent:event];
+    if ([[self slidingPanelController] leftPanelCenterViewInteractionMode] == MSSPCenterViewInteractionNavBar && ![self navigationBarInSuperViewOfView:hitView])
+      return (nil);
+  }
+  else if ([[self slidingPanelController] sideDisplayed] == MSSPSideDisplayedRight)
+  {
+    if ([[self slidingPanelController] rightPanelCenterViewInteractionMode] == MSSPCenterViewInteractionNone)
+      return (nil);
     
-    if ([[self slidingPanelController] sideDisplayed] == MSSPSideDisplayedLeft)
-    {
-        if ([[self slidingPanelController] leftPanelCenterViewInteractionMode] == MSSPCenterViewInteractionNone)
-            return (nil);
-        
-        if ([[self slidingPanelController] leftPanelCenterViewInteractionMode] == MSSPCenterViewInteractionNavBar && ![self navigationBarInSuperViewOfView:hitView])
-            return (nil);
-    }
-    else if ([[self slidingPanelController] sideDisplayed] == MSSPSideDisplayedRight)
-    {
-        if ([[self slidingPanelController] rightPanelCenterViewInteractionMode] == MSSPCenterViewInteractionNone)
-            return (nil);
-        
-        if ([[self slidingPanelController] rightPanelCenterViewInteractionMode] == MSSPCenterViewInteractionNavBar && ![self navigationBarInSuperViewOfView:hitView])
-            return (nil);
-    }
-    
-    return (hitView);
+    if ([[self slidingPanelController] rightPanelCenterViewInteractionMode] == MSSPCenterViewInteractionNavBar && ![self navigationBarInSuperViewOfView:hitView])
+      return (nil);
+  }
+  
+  return (hitView);
 }
 
 /**
@@ -434,21 +434,21 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (UINavigationBar *)navigationBarInSuperViewOfView:(UIView *)view
 {
-    UIView  *superView;
+  UIView  *superView;
+  
+  if ([view isKindOfClass:[UINavigationBar class]])
+    return ((UINavigationBar *) view);
+  
+  superView = [view superview];
+  while (superView)
+  {
+    if ([superView isKindOfClass:[UINavigationBar class]])
+      return ((UINavigationBar *) superView);
     
-    if ([view isKindOfClass:[UINavigationBar class]])
-        return ((UINavigationBar *) view);
-    
-    superView = [view superview];
-    while (superView)
-    {
-        if ([superView isKindOfClass:[UINavigationBar class]])
-            return ((UINavigationBar *) superView);
-        
-        superView = [superView superview];
-    }
-    
-    return (nil);
+    superView = [superView superview];
+  }
+  
+  return (nil);
 }
 
 @end
@@ -465,12 +465,12 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (id)init
 {
-    self = [super init];
-    
-    if (self)
-        [self commonSettings];
-    
-    return (self);
+  self = [super init];
+  
+  if (self)
+    [self commonSettings];
+  
+  return (self);
 }
 
 /**
@@ -482,12 +482,12 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-    self = [super initWithCoder:aDecoder];
-    
-    if (self)
-        [self commonSettings];
-    
-    return (self);
+  self = [super initWithCoder:aDecoder];
+  
+  if (self)
+    [self commonSettings];
+  
+  return (self);
 }
 
 /**
@@ -500,12 +500,12 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    
-    if (self)
-        [self commonSettings];
-    
-    return (self);
+  self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+  
+  if (self)
+    [self commonSettings];
+  
+  return (self);
 }
 
 /**
@@ -517,15 +517,15 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (id)initWithCenterViewController:(UIViewController *)centerViewController
 {
-    self = [super init];
-    
-    if (self)
-    {
-        [self commonSettings];
-        [self setCenterViewController:centerViewController];
-    }
-    
-    return (self);
+  self = [super init];
+  
+  if (self)
+  {
+    [self commonSettings];
+    [self setCenterViewController:centerViewController];
+  }
+  
+  return (self);
 }
 
 /**
@@ -538,16 +538,16 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (id)initWithCenterViewController:(UIViewController *)centerViewController andLeftPanelController:(UIViewController *)leftPanelController
 {
-    self = [super init];
-    
-    if (self)
-    {
-        [self commonSettings];
-        [self setCenterViewController:centerViewController];
-        [self setLeftPanelController:leftPanelController];
-    }
-    
-    return (self);
+  self = [super init];
+  
+  if (self)
+  {
+    [self commonSettings];
+    [self setCenterViewController:centerViewController];
+    [self setLeftPanelController:leftPanelController];
+  }
+  
+  return (self);
 }
 
 /**
@@ -560,16 +560,16 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (id)initWithCenterViewController:(UIViewController *)centerViewController andRightPanelController:(UIViewController *)rightPanelController
 {
-    self = [super init];
-    
-    if (self)
-    {
-        [self commonSettings];
-        [self setCenterViewController:centerViewController];
-        [self setRightPanelController:rightPanelController];
-    }
-    
-    return (self);
+  self = [super init];
+  
+  if (self)
+  {
+    [self commonSettings];
+    [self setCenterViewController:centerViewController];
+    [self setRightPanelController:rightPanelController];
+  }
+  
+  return (self);
 }
 
 /**
@@ -583,17 +583,17 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (id)initWithCenterViewController:(UIViewController *)centerViewController leftPanelController:(UIViewController *)leftPanelController andRightPanelController:(UIViewController *)rightPanelController
 {
-    self = [super init];
-    
-    if (self)
-    {
-        [self commonSettings];
-        [self setCenterViewController:centerViewController];
-        [self setLeftPanelController:leftPanelController];
-        [self setRightPanelController:rightPanelController];
-    }
-    
-    return (self);
+  self = [super init];
+  
+  if (self)
+  {
+    [self commonSettings];
+    [self setCenterViewController:centerViewController];
+    [self setLeftPanelController:leftPanelController];
+    [self setRightPanelController:rightPanelController];
+  }
+  
+  return (self);
 }
 
 #pragma mark View life cycle
@@ -604,33 +604,42 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)loadView
 {
-    CGSize  windowSize;
-    
-    [super loadView];
-    
-    windowSize = [[UIScreen mainScreen] bounds].size;
-    
-    if ([self storyboard])
-        [self setViewsFromStoryboard];
-    
-    [self setStatusBarView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, windowSize.width, 20)]];
-    [[self statusBarView] setBackgroundColor:[self centerViewStatusBarColor]];
-    [[self statusBarView] setAutoresizingMask:(UIViewAutoresizingFlexibleWidth)];
-    [[self statusBarView] setUserInteractionEnabled:NO];
-    
-    [self setCenterView:[[MSSlidingPanelCenterView alloc] initWithFrame:CGRectMake(0, 0, windowSize.width, windowSize.height)]];
-    [[self centerView] setSlidingPanelController:self];
-    [[[self centerViewController] view] setFrame:[[self centerView] frame]];
-    [[[self centerViewController] view] setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
-    [[self centerView] addSubview:[[self centerViewController] view]];
-    [[self centerView] setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
-    
-    [self setView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, windowSize.width, windowSize.height)]];
-    [[self view] addSubview:[self centerView]];
-    [[self view] addSubview:[self statusBarView]];
-    [[self view] setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
-    
-    [self setGestureRecognizers];
+  CGRect  centerViewFrame;
+  CGSize  windowSize;
+  
+  [super loadView];
+  
+  windowSize = [[UIScreen mainScreen] bounds].size;
+  
+  if ([self storyboard])
+    [self setViewsFromStoryboard];
+  
+  [self setStatusBarView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, windowSize.width, 20)]];
+  [[self statusBarView] setBackgroundColor:[self centerViewStatusBarColor]];
+  [[self statusBarView] setAutoresizingMask:(UIViewAutoresizingFlexibleWidth)];
+  
+  [self setCenterView:[[MSSlidingPanelCenterView alloc] initWithFrame:CGRectMake(0, 0, windowSize.width, windowSize.height)]];
+  [[self centerView] setSlidingPanelController:self];
+  [[[self centerViewController] view] setFrame:[[self centerView] frame]];
+  [[[self centerViewController] view] setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
+  [[self centerView] addSubview:[[self centerViewController] view]];
+  [[self centerView] setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
+  
+  if ([[self parentViewController] isKindOfClass:[UITabBarController class]] &&
+      [[self centerViewController] isKindOfClass:[UINavigationController class]] &&
+      ![[(UITabBarController *)[self parentViewController] tabBar] isTranslucent])
+  {
+    centerViewFrame = [[[self centerViewController] view] frame];
+    centerViewFrame.size.height += [[(UITabBarController *)[self parentViewController] tabBar] frame].size.height;
+    [[[self centerViewController] view] setFrame:centerViewFrame];
+  }
+  
+  [self setView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, windowSize.width, windowSize.height)]];
+  [[self view] addSubview:[self centerView]];
+  [[self view] addSubview:[self statusBarView]];
+  [[self view] setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
+  
+  [self setGestureRecognizers];
 }
 
 #pragma mark Tools
@@ -641,48 +650,48 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)adjustStatusBarColor
 {
-    UIColor *statusBarColor;
-    CGFloat percentVisible;
-    CGFloat statusBarCenterAlpha;
-    CGFloat statusBarCenterBlue;
-    CGFloat statusBarCenterGreen;
-    CGFloat statusBarCenterRed;
-    CGFloat statusBarPanelAlpha;
-    CGFloat statusBarPanelBlue;
-    CGFloat statusBarPanelGreen;
-    CGFloat statusBarPanelRed;
-    
-    statusBarColor = [self statusBarColorForSide:[self sideDisplayed]];
-    
-    if ([self sideDisplayed] != MSSPSideDisplayedNone && [self statusBarDisplayedSmoothlyForSide:[self sideDisplayed]])
+  UIColor *statusBarColor;
+  CGFloat percentVisible;
+  CGFloat statusBarCenterAlpha;
+  CGFloat statusBarCenterBlue;
+  CGFloat statusBarCenterGreen;
+  CGFloat statusBarCenterRed;
+  CGFloat statusBarPanelAlpha;
+  CGFloat statusBarPanelBlue;
+  CGFloat statusBarPanelGreen;
+  CGFloat statusBarPanelRed;
+  
+  statusBarColor = [self statusBarColorForSide:[self sideDisplayed]];
+  
+  if ([self sideDisplayed] != MSSPSideDisplayedNone && [self statusBarDisplayedSmoothlyForSide:[self sideDisplayed]])
+  {
+    if (![[self centerViewStatusBarColor] getRed:&statusBarCenterRed green:&statusBarCenterGreen blue:&statusBarCenterBlue alpha:&statusBarCenterAlpha])
     {
-        if (![[self centerViewStatusBarColor] getRed:&statusBarCenterRed green:&statusBarCenterGreen blue:&statusBarCenterBlue alpha:&statusBarCenterAlpha])
-        {
-            [[self centerViewStatusBarColor] getWhite:&statusBarCenterRed alpha:&statusBarCenterAlpha];
-            
-            statusBarCenterGreen = statusBarCenterRed;
-            statusBarCenterBlue = statusBarCenterRed;
-        }
-        
-        if (![statusBarColor getRed:&statusBarPanelRed green:&statusBarPanelGreen blue:&statusBarPanelBlue alpha:&statusBarPanelAlpha])
-        {
-            [statusBarColor getWhite:&statusBarPanelRed alpha:&statusBarPanelAlpha];
-            
-            statusBarPanelGreen = statusBarPanelRed;
-            statusBarPanelBlue = statusBarPanelRed;
-        }
-        
-        percentVisible = [self percentageVisibleOfDisplayedPanel];
-        
-        statusBarCenterRed += (statusBarPanelRed - statusBarCenterRed) * percentVisible;
-        statusBarCenterGreen += (statusBarPanelGreen - statusBarCenterGreen) * percentVisible;
-        statusBarCenterBlue += (statusBarPanelBlue - statusBarCenterBlue) * percentVisible;
-        statusBarCenterAlpha += (statusBarPanelAlpha - statusBarCenterAlpha) * percentVisible;
-        
-        [[self statusBarView] setBackgroundColor:[UIColor colorWithRed:statusBarCenterRed green:statusBarCenterGreen blue:statusBarCenterBlue alpha:statusBarCenterAlpha]];
+      [[self centerViewStatusBarColor] getWhite:&statusBarCenterRed alpha:&statusBarCenterAlpha];
+      
+      statusBarCenterGreen = statusBarCenterRed;
+      statusBarCenterBlue = statusBarCenterRed;
     }
-    else
-        [[self statusBarView] setBackgroundColor:statusBarColor];
+    
+    if (![statusBarColor getRed:&statusBarPanelRed green:&statusBarPanelGreen blue:&statusBarPanelBlue alpha:&statusBarPanelAlpha])
+    {
+      [statusBarColor getWhite:&statusBarPanelRed alpha:&statusBarPanelAlpha];
+      
+      statusBarPanelGreen = statusBarPanelRed;
+      statusBarPanelBlue = statusBarPanelRed;
+    }
+    
+    percentVisible = [self percentageVisibleOfDisplayedPanel];
+    
+    statusBarCenterRed += (statusBarPanelRed - statusBarCenterRed) * percentVisible;
+    statusBarCenterGreen += (statusBarPanelGreen - statusBarCenterGreen) * percentVisible;
+    statusBarCenterBlue += (statusBarPanelBlue - statusBarCenterBlue) * percentVisible;
+    statusBarCenterAlpha += (statusBarPanelAlpha - statusBarCenterAlpha) * percentVisible;
+    
+    [[self statusBarView] setBackgroundColor:[UIColor colorWithRed:statusBarCenterRed green:statusBarCenterGreen blue:statusBarCenterBlue alpha:statusBarCenterAlpha]];
+  }
+  else
+    [[self statusBarView] setBackgroundColor:statusBarColor];
 }
 
 /**
@@ -694,10 +703,10 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (NSTimeInterval)animationDurationForLength:(CGFloat)length
 {
-    if (length <= 0)
-        length *= -1;
-    
-    return (length / [self animationVelocity]);
+  if (length <= 0)
+    length *= -1;
+  
+  return (length / [self animationVelocity]);
 }
 
 /**
@@ -705,27 +714,27 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)commonSettings
 {
-    _centerViewController = nil;
-    [self setCenterViewStatusBarColor:[UIColor clearColor]];
-    
-    [self setLeftPanelCenterViewInteractionMode:MSSPCenterViewInteractionNavBar];
-    [self setLeftPanelCloseGestureMode:MSSPCloseGestureModeAll];
-    [self setLeftPanelController:nil];
-    [self setLeftPanelMaximumWidth:g_panelMaximumWidth];
-    [self setLeftPanelOpenGestureMode:MSSPOpenGestureModeAll];
-    [self setLeftPanelStatusBarColor:[UIColor clearColor]];
-    [self setLeftPanelStatusBarDisplayedSmoothly:NO];
-    
-    [self setRightPanelCenterViewInteractionMode:MSSPCenterViewInteractionNavBar];
-    [self setRightPanelCloseGestureMode:MSSPCloseGestureModeAll];
-    [self setRightPanelController:nil];
-    [self setRightPanelMaximumWidth:g_panelMaximumWidth];
-    [self setRightPanelOpenGestureMode:MSSPOpenGestureModeAll];
-    [self setRightPanelStatusBarColor:[UIColor clearColor]];
-    [self setRightPanelStatusBarDisplayedSmoothly:NO];
- 
-    [self setAnimationVelocity:g_animationVelocity];
-    [self setSideDisplayed:MSSPSideDisplayedNone];
+  _centerViewController = nil;
+  [self setCenterViewStatusBarColor:[UIColor clearColor]];
+  
+  [self setLeftPanelCenterViewInteractionMode:MSSPCenterViewInteractionNavBar];
+  [self setLeftPanelCloseGestureMode:MSSPCloseGestureModeAll];
+  [self setLeftPanelController:nil];
+  [self setLeftPanelMaximumWidth:g_panelMaximumWidth];
+  [self setLeftPanelOpenGestureMode:MSSPOpenGestureModeNone];
+  [self setLeftPanelStatusBarColor:[UIColor clearColor]];
+  [self setLeftPanelStatusBarDisplayedSmoothly:NO];
+  
+  [self setRightPanelCenterViewInteractionMode:MSSPCenterViewInteractionNavBar];
+  [self setRightPanelCloseGestureMode:MSSPCloseGestureModeAll];
+  [self setRightPanelController:nil];
+  [self setRightPanelMaximumWidth:g_panelMaximumWidth];
+  [self setRightPanelOpenGestureMode:MSSPOpenGestureModeNone];
+  [self setRightPanelStatusBarColor:[UIColor clearColor]];
+  [self setRightPanelStatusBarDisplayedSmoothly:NO];
+  
+  [self setAnimationVelocity:g_animationVelocity];
+  [self setSideDisplayed:MSSPSideDisplayedNone];
 }
 
 /**
@@ -736,13 +745,13 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)fillNavigationBarsList:(NSMutableArray *)navigationBarList withSubviewsOfView:(UIView *)view
 {
-    UIView  *subview;
-    
-    if ([view isKindOfClass:[UINavigationBar class]])
-        [navigationBarList addObject:view];
-    
-    for (subview in [view subviews])
-        [self fillNavigationBarsList:navigationBarList withSubviewsOfView:subview];
+  UIView  *subview;
+  
+  if ([view isKindOfClass:[UINavigationBar class]])
+    [navigationBarList addObject:view];
+  
+  for (subview in [view subviews])
+    [self fillNavigationBarsList:navigationBarList withSubviewsOfView:subview];
 }
 
 /**
@@ -752,12 +761,12 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (CGFloat)percentageVisibleOfDisplayedPanel
 {
-    if ([self sideDisplayed] == MSSPSideDisplayedLeft)
-        return ([[self centerView] frame].origin.x / [self leftPanelMaximumWidth]);
-    else if ([self sideDisplayed] == MSSPSideDisplayedRight)
-        return ([[self centerView] frame].origin.x / - (NSInteger)[self rightPanelMaximumWidth]);
-    
-    return (0);
+  if ([self sideDisplayed] == MSSPSideDisplayedLeft)
+    return ([[self centerView] frame].origin.x / [self leftPanelMaximumWidth]);
+  else if ([self sideDisplayed] == MSSPSideDisplayedRight)
+    return ([[self centerView] frame].origin.x / - (NSInteger)[self rightPanelMaximumWidth]);
+  
+  return (0);
 }
 
 #pragma mark Set center view and panels
@@ -770,31 +779,31 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)setCenterViewController:(UIViewController *)centerViewController
 {
-    CGRect  frame;
-    
-    NSParameterAssert(centerViewController);
-    
-    if ([self isViewLoaded])
+  CGRect  frame;
+  
+  NSParameterAssert(centerViewController);
+  
+  if ([self isViewLoaded])
 #ifndef __clang_analyzer__
-        frame = [[[self centerViewController] view] frame];
+    frame = [[[self centerViewController] view] frame];
 #endif
-    
-    [[[self centerViewController] view] removeFromSuperview];
-    [[self centerViewController] removeFromParentViewController];
-    
-    _centerViewController = centerViewController;
-    
-    [self addChildViewController:[self centerViewController]];
-    [[self centerViewController] didMoveToParentViewController:self];
-    
-    if ([self isViewLoaded])
-    {
+  
+  [[[self centerViewController] view] removeFromSuperview];
+  [[self centerViewController] removeFromParentViewController];
+  
+  _centerViewController = centerViewController;
+  
+  [self addChildViewController:[self centerViewController]];
+  [[self centerViewController] didMoveToParentViewController:self];
+  
+  if ([self isViewLoaded])
+  {
 #ifndef __clang_analyzer__
-        [[[self centerViewController] view] setFrame:frame];
+    [[[self centerViewController] view] setFrame:frame];
 #endif
-        [[[self centerViewController] view] setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
-        [[self centerView] addSubview:[[self centerViewController] view]];
-    }
+    [[[self centerViewController] view] setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
+    [[self centerView] addSubview:[[self centerViewController] view]];
+  }
 }
 
 /**
@@ -804,7 +813,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)setLeftPanelController:(UIViewController *)leftPanelController
 {
-    [self setPanelController:leftPanelController forSide:MSSPSideDisplayedLeft];
+  [self setPanelController:leftPanelController forSide:MSSPSideDisplayedLeft];
 }
 
 /**
@@ -815,46 +824,46 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)setPanelController:(UIViewController *)panelController forSide:(MSSPSideDisplayed)side
 {
-    __block BOOL    reloadPanel;
-    void            (^setController)(void);
+  __block BOOL    reloadPanel;
+  void            (^setController)(void);
+  
+  NSParameterAssert(side != MSSPSideDisplayedNone);
+  
+  reloadPanel = NO;
+  setController = ^(void)
+  {
+    [[self panelControllerForSide:side] removeFromParentViewController];
     
-    NSParameterAssert(side != MSSPSideDisplayedNone);
+    if (side == MSSPSideDisplayedLeft)
+      _leftPanelController = panelController;
+    else
+      _rightPanelController = panelController;
     
-    reloadPanel = NO;
-    setController = ^(void)
+    if (!panelController)
+      return ;
+    
+    [self addChildViewController:panelController];
+    [[self panelControllerForSide:side] didMoveToParentViewController:self];
+    
+    if (reloadPanel)
+      [self loadPanelForSide:side];
+  };
+  
+  if ([self isViewLoaded] && [self sideDisplayed] == side)
+  {
+    if (!panelController)
     {
-        [[self panelControllerForSide:side] removeFromParentViewController];
-        
-        if (side == MSSPSideDisplayedLeft)
-            _leftPanelController = panelController;
-        else
-            _rightPanelController = panelController;
-        
-        if (!panelController)
-            return ;
-        
-        [self addChildViewController:panelController];
-        [[self panelControllerForSide:side] didMoveToParentViewController:self];
-        
-        if (reloadPanel)
-            [self loadPanelForSide:side];
-    };
-    
-    if ([self isViewLoaded] && [self sideDisplayed] == side)
-    {
-        if (!panelController)
-        {
-            [self closePanelWithCompletion:setController];
-            return ;
-        }
-        else
-        {
-            [self unloadPanelForSide:side];
-            reloadPanel = YES;
-        }
+      [self closePanelWithCompletion:setController animated:YES];
+      return ;
     }
-    
-    setController();
+    else
+    {
+      [self unloadPanelForSide:side];
+      reloadPanel = YES;
+    }
+  }
+  
+  setController();
 }
 
 /**
@@ -864,7 +873,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)setRightPanelController:(UIViewController *)rightPanelController
 {
-    [self setPanelController:rightPanelController forSide:MSSPSideDisplayedRight];
+  [self setPanelController:rightPanelController forSide:MSSPSideDisplayedRight];
 }
 
 #pragma mark Panels settings
@@ -877,7 +886,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)setLeftPanelMaximumWidth:(CGFloat)leftPanelMaximumWidth
 {
-    [self setLeftPanelMaximumWidth:leftPanelMaximumWidth withCompletion:nil];
+  [self setLeftPanelMaximumWidth:leftPanelMaximumWidth withCompletion:nil];
 }
 
 /**
@@ -888,7 +897,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)setLeftPanelMaximumWidth:(CGFloat)leftPanelMaximumWidth withCompletion:(void (^)(void))completion
 {
-    [self setPanelMaximumWidth:leftPanelMaximumWidth forSide:MSSPSideDisplayedLeft withCompletion:completion];
+  [self setPanelMaximumWidth:leftPanelMaximumWidth forSide:MSSPSideDisplayedLeft withCompletion:completion];
 }
 
 /**
@@ -900,23 +909,23 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)setPanelMaximumWidth:(CGFloat)panelMaximumWidth forSide:(MSSPSideDisplayed)side withCompletion:(void (^)(void))completion
 {
-    NSParameterAssert(side != MSSPSideDisplayedNone);
-    
-    if (panelMaximumWidth < 0)
-        panelMaximumWidth = 0;
-    
-    if (panelMaximumWidth > [[UIScreen mainScreen] bounds].size.width)
-        panelMaximumWidth = [[UIScreen mainScreen] bounds].size.width;
-    
-    if (side == MSSPSideDisplayedLeft)
-        _leftPanelMaximumWidth = panelMaximumWidth;
-    else
-        _rightPanelMaximumWidth = panelMaximumWidth;
-    
-    if ([self sideDisplayed] == side)
-        [self openPanelSide:side withCompletion:completion andStatusBarColorUpdate:NO];
-    else if (completion)
-        completion();
+  NSParameterAssert(side != MSSPSideDisplayedNone);
+  
+  if (panelMaximumWidth < 0)
+    panelMaximumWidth = 0;
+  
+  if (panelMaximumWidth > [[UIScreen mainScreen] bounds].size.width)
+    panelMaximumWidth = [[UIScreen mainScreen] bounds].size.width;
+  
+  if (side == MSSPSideDisplayedLeft)
+    _leftPanelMaximumWidth = panelMaximumWidth;
+  else
+    _rightPanelMaximumWidth = panelMaximumWidth;
+  
+  if ([self sideDisplayed] == side)
+    [self openPanelSide:side withCompletion:completion andStatusBarColorUpdate:NO];
+  else if (completion)
+    completion();
 }
 
 /**
@@ -926,7 +935,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)setRightPanelMaximumWidth:(CGFloat)rightPanelMaximumWidth
 {
-    [self setRightPanelMaximumWidth:rightPanelMaximumWidth withCompletion:nil];
+  [self setRightPanelMaximumWidth:rightPanelMaximumWidth withCompletion:nil];
 }
 
 /**
@@ -937,7 +946,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)setRightPanelMaximumWidth:(CGFloat)rightPanelMaximumWidth withCompletion:(void (^)(void))completion
 {
-    [self setPanelMaximumWidth:rightPanelMaximumWidth forSide:MSSPSideDisplayedRight withCompletion:completion];
+  [self setPanelMaximumWidth:rightPanelMaximumWidth forSide:MSSPSideDisplayedRight withCompletion:completion];
 }
 
 #pragma mark Panels information
@@ -952,12 +961,12 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (UIViewController *)panelControllerForSide:(MSSPSideDisplayed)side
 {
-    NSParameterAssert(side != MSSPSideDisplayedNone);
-    
-    if (side == MSSPSideDisplayedLeft)
-        return ([self leftPanelController]);
-    else
-        return ([self rightPanelController]);
+  NSParameterAssert(side != MSSPSideDisplayedNone);
+  
+  if (side == MSSPSideDisplayedLeft)
+    return ([self leftPanelController]);
+  else
+    return ([self rightPanelController]);
 }
 
 /**
@@ -969,12 +978,12 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (NSUInteger)panelMaximumWithForSide:(MSSPSideDisplayed)side
 {
-    NSParameterAssert(side != MSSPSideDisplayedNone);
-    
-    if (side == MSSPSideDisplayedLeft)
-        return ([self leftPanelMaximumWidth]);
-    else
-        return ([self rightPanelMaximumWidth]);
+  NSParameterAssert(side != MSSPSideDisplayedNone);
+  
+  if (side == MSSPSideDisplayedLeft)
+    return ([self leftPanelMaximumWidth]);
+  else
+    return ([self rightPanelMaximumWidth]);
 }
 
 /**
@@ -986,12 +995,12 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (UIColor *)statusBarColorForSide:(MSSPSideDisplayed)side
 {
-    if (side == MSSPSideDisplayedLeft)
-        return ([self leftPanelStatusBarColor]);
-    else if (side == MSSPSideDisplayedRight)
-        return ([self rightPanelStatusBarColor]);
-    
-    return ([self centerViewStatusBarColor]);
+  if (side == MSSPSideDisplayedLeft)
+    return ([self leftPanelStatusBarColor]);
+  else if (side == MSSPSideDisplayedRight)
+    return ([self rightPanelStatusBarColor]);
+  
+  return ([self centerViewStatusBarColor]);
 }
 
 /**
@@ -1003,12 +1012,12 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (BOOL)statusBarDisplayedSmoothlyForSide:(MSSPSideDisplayed)side
 {
-    NSParameterAssert(side != MSSPSideDisplayedNone);
-    
-    if (side == MSSPSideDisplayedLeft)
-        return ([self leftPanelStatusBarDisplayedSmoothly]);
-
-    return ([self rightPanelStatusBarDisplayedSmoothly]);
+  NSParameterAssert(side != MSSPSideDisplayedNone);
+  
+  if (side == MSSPSideDisplayedLeft)
+    return ([self leftPanelStatusBarDisplayedSmoothly]);
+  
+  return ([self rightPanelStatusBarDisplayedSmoothly]);
 }
 
 #pragma mark Manage gestures
@@ -1024,24 +1033,24 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    MSSPOpenGestureMode openGestureMode;
-    
-    if ([self sideDisplayed] == MSSPSideDisplayedLeft)
-        return (([self leftPanelCloseGestureMode] & [self closeGestureModeWithGestureRecognizer:gestureRecognizer andTouch:touch]) > 0);
-    else if ([self sideDisplayed] == MSSPSideDisplayedRight)
-        return (([self rightPanelCloseGestureMode] & [self closeGestureModeWithGestureRecognizer:gestureRecognizer andTouch:touch]) > 0);
-    
-    openGestureMode = [self openGestureModeWithGestureRecognizer:gestureRecognizer andTouch:touch];
-    
-    if ([self leftPanelController] && [self rightPanelController])
-        return ((([self leftPanelOpenGestureMode] & openGestureMode) > 0) ||
-                (([self rightPanelOpenGestureMode] & openGestureMode) > 0));
-    else if ([self leftPanelController])
-        return (([self leftPanelOpenGestureMode] & openGestureMode) > 0);
-    else if ([self rightPanelController])
-        return (([self rightPanelOpenGestureMode] & openGestureMode) > 0);
-    
-    return (NO);
+  MSSPOpenGestureMode openGestureMode;
+  
+  if ([self sideDisplayed] == MSSPSideDisplayedLeft)
+    return (([self leftPanelCloseGestureMode] & [self closeGestureModeWithGestureRecognizer:gestureRecognizer andTouch:touch]) > 0);
+  else if ([self sideDisplayed] == MSSPSideDisplayedRight)
+    return (([self rightPanelCloseGestureMode] & [self closeGestureModeWithGestureRecognizer:gestureRecognizer andTouch:touch]) > 0);
+  
+  openGestureMode = [self openGestureModeWithGestureRecognizer:gestureRecognizer andTouch:touch];
+  
+  if ([self leftPanelController] && [self rightPanelController])
+    return ((([self leftPanelOpenGestureMode] & openGestureMode) > 0) ||
+            (([self rightPanelOpenGestureMode] & openGestureMode) > 0));
+  else if ([self leftPanelController])
+    return (([self leftPanelOpenGestureMode] & openGestureMode) > 0);
+  else if ([self rightPanelController])
+    return (([self rightPanelOpenGestureMode] & openGestureMode) > 0);
+  
+  return (NO);
 }
 
 /**
@@ -1054,10 +1063,10 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
-    if ([[self delegate] respondsToSelector:@selector(slidingPanelController:gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:)])
-        return ([[self delegate] slidingPanelController:self gestureRecognizer:gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:otherGestureRecognizer]);
-    
-    return (NO);
+  if ([[self delegate] respondsToSelector:@selector(slidingPanelController:gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:)])
+    return ([[self delegate] slidingPanelController:self gestureRecognizer:gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:otherGestureRecognizer]);
+  
+  return (NO);
 }
 
 /**
@@ -1070,39 +1079,39 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (MSSPCloseGestureMode)closeGestureModeWithGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer andTouch:(UITouch *)touch
 {
-    MSSPCloseGestureMode    closeGestureMode;
-    NSMutableArray          *navigationBarList;
-    
-    if (![self isTouchInCenterView:touch])
-        return (MSSPCloseGestureModeNone);
-    
-    closeGestureMode = MSSPCloseGestureModeNone;
-    navigationBarList = [[NSMutableArray alloc] init];
-    [self fillNavigationBarsList:navigationBarList withSubviewsOfView:[self centerView]];
-    
-    if (gestureRecognizer == [self tapGestureRecognizer])
+  MSSPCloseGestureMode    closeGestureMode;
+  NSMutableArray          *navigationBarList;
+  
+  if (![self isTouchInCenterView:touch])
+    return (MSSPCloseGestureModeNone);
+  
+  closeGestureMode = MSSPCloseGestureModeNone;
+  navigationBarList = [[NSMutableArray alloc] init];
+  [self fillNavigationBarsList:navigationBarList withSubviewsOfView:[self centerView]];
+  
+  if (gestureRecognizer == [self tapGestureRecognizer])
+  {
+    if ([self isTouch:touch inNavigationBars:navigationBarList])
+      closeGestureMode |= MSSPCloseGestureModeTapNavBar;
+    else
+      closeGestureMode |= MSSPCloseGestureModeTapContent;
+  }
+  
+  if (gestureRecognizer == [self panGestureRecognizer])
+  {
+    if ([self isTouch:touch inNavigationBars:navigationBarList])
     {
-        if ([self isTouch:touch inNavigationBars:navigationBarList])
-            closeGestureMode |= MSSPCloseGestureModeTapNavBar;
-        else
-            closeGestureMode |= MSSPCloseGestureModeTapContent;
+      closeGestureMode |= MSSPCloseGestureModePanNavBar;
+      [self setPanTouchLocation:MSSPPanTouchLocationNavBar];
     }
-    
-    if (gestureRecognizer == [self panGestureRecognizer])
+    else
     {
-        if ([self isTouch:touch inNavigationBars:navigationBarList])
-        {
-            closeGestureMode |= MSSPCloseGestureModePanNavBar;
-            [self setPanTouchLocation:MSSPPanTouchLocationNavBar];
-        }
-        else
-        {
-            closeGestureMode |= MSSPCloseGestureModePanContent;
-            [self setPanTouchLocation:MSSPPanTouchLocationContent];
-        }
+      closeGestureMode |= MSSPCloseGestureModePanContent;
+      [self setPanTouchLocation:MSSPPanTouchLocationContent];
     }
-    
-    return (closeGestureMode);
+  }
+  
+  return (closeGestureMode);
 }
 
 /**
@@ -1114,13 +1123,13 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (BOOL)isTouchInCenterView:(UITouch *)touch
 {
-    CGRect  centerViewFrame;
-    CGPoint touchPoint;
-    
-    touchPoint = [touch locationInView:[self view]];
-    centerViewFrame = [[self centerView] frame];
-    
-    return (CGRectContainsPoint(centerViewFrame, touchPoint));
+  CGRect  centerViewFrame;
+  CGPoint touchPoint;
+  
+  touchPoint = [touch locationInView:[self view]];
+  centerViewFrame = [[self centerView] frame];
+  
+  return (CGRectContainsPoint(centerViewFrame, touchPoint));
 }
 
 /**
@@ -1133,20 +1142,20 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (BOOL)isTouch:(UITouch *)touch inNavigationBars:(NSArray *)navigationBarsList
 {
-    UINavigationBar *navigationBar;
-    CGRect          navigationBarFrame;
-    CGPoint         touchPoint;
+  UINavigationBar *navigationBar;
+  CGRect          navigationBarFrame;
+  CGPoint         touchPoint;
+  
+  touchPoint = [touch locationInView:[self view]];
+  for (navigationBar in navigationBarsList)
+  {
+    navigationBarFrame = [navigationBar convertRect:[navigationBar bounds] toView:[self view]];
     
-    touchPoint = [touch locationInView:[self view]];
-    for (navigationBar in navigationBarsList)
-    {
-        navigationBarFrame = [navigationBar convertRect:[navigationBar bounds] toView:[self view]];
-
-        if (CGRectContainsPoint(navigationBarFrame, touchPoint))
-            return (YES);
-    }
-    
-    return (NO);
+    if (CGRectContainsPoint(navigationBarFrame, touchPoint))
+      return (YES);
+  }
+  
+  return (NO);
 }
 
 /**
@@ -1159,31 +1168,31 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (MSSPOpenGestureMode)openGestureModeWithGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer andTouch:(UITouch *)touch
 {
-    MSSPOpenGestureMode     openGestureMode;
-    NSMutableArray          *navigationBarList;
-    
-    if (![self isTouchInCenterView:touch])
-        return (MSSPOpenGestureModeNone);
-    
-    openGestureMode = MSSPOpenGestureModeNone;
-    navigationBarList = [[NSMutableArray alloc] init];
-    [self fillNavigationBarsList:navigationBarList withSubviewsOfView:[self centerView]];
-    
-    if (gestureRecognizer == [self panGestureRecognizer])
+  MSSPOpenGestureMode     openGestureMode;
+  NSMutableArray          *navigationBarList;
+  
+  if (![self isTouchInCenterView:touch])
+    return (MSSPOpenGestureModeNone);
+  
+  openGestureMode = MSSPOpenGestureModeNone;
+  navigationBarList = [[NSMutableArray alloc] init];
+  [self fillNavigationBarsList:navigationBarList withSubviewsOfView:[self centerView]];
+  
+  if (gestureRecognizer == [self panGestureRecognizer])
+  {
+    if ([self isTouch:touch inNavigationBars:navigationBarList])
     {
-        if ([self isTouch:touch inNavigationBars:navigationBarList])
-        {
-            openGestureMode |= MSSPOpenGestureModePanNavBar;
-            [self setPanTouchLocation:MSSPPanTouchLocationNavBar];
-        }
-        else
-        {
-            openGestureMode |= MSSPOpenGestureModePanContent;
-            [self setPanTouchLocation:MSSPPanTouchLocationContent];
-        }
+      openGestureMode |= MSSPOpenGestureModePanNavBar;
+      [self setPanTouchLocation:MSSPPanTouchLocationNavBar];
     }
-    
-    return (openGestureMode);
+    else
+    {
+      openGestureMode |= MSSPOpenGestureModePanContent;
+      [self setPanTouchLocation:MSSPPanTouchLocationContent];
+    }
+  }
+  
+  return (openGestureMode);
 }
 
 /**
@@ -1193,41 +1202,41 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)panGestureRecognizer
 {
-    CGRect  newCenterViewFrame;
-    CGFloat translationX;
-    
-    if ([panGestureRecognizer state] == UIGestureRecognizerStateBegan)
-        [self setPanTranslation:CGPointZero];
-    
-    translationX = [panGestureRecognizer translationInView:[self view]].x - [self panTranslation].x;
-    [self setPanTranslation:[panGestureRecognizer translationInView:[self view]]];
-    
-    newCenterViewFrame = [[self centerView] frame];
-    newCenterViewFrame.origin.x += translationX;
-    
-    [self panGestureVerifyAuthorizationForNewCenterViewFrame:&newCenterViewFrame];
-    [self adjustStatusBarColor];
-    [[self centerView] setFrame:newCenterViewFrame];
-    
-    if ([panGestureRecognizer state] == UIGestureRecognizerStateEnded)
+  CGRect  newCenterViewFrame;
+  CGFloat translationX;
+  
+  if ([panGestureRecognizer state] == UIGestureRecognizerStateBegan)
+    [self setPanTranslation:CGPointZero];
+  
+  translationX = [panGestureRecognizer translationInView:[self view]].x - [self panTranslation].x;
+  [self setPanTranslation:[panGestureRecognizer translationInView:[self view]]];
+  
+  newCenterViewFrame = [[self centerView] frame];
+  newCenterViewFrame.origin.x += translationX;
+  
+  [self panGestureVerifyAuthorizationForNewCenterViewFrame:&newCenterViewFrame];
+  [self adjustStatusBarColor];
+  [[self centerView] setFrame:newCenterViewFrame];
+  
+  if ([panGestureRecognizer state] == UIGestureRecognizerStateEnded)
+  {
+    if ([self sideDisplayed] == MSSPSideDisplayedLeft)
     {
-        if ([self sideDisplayed] == MSSPSideDisplayedLeft)
-        {
-            if ([[self centerView] frame].origin.x <= [self leftPanelMaximumWidth] / 2)
-                [self closePanel];
-            else
-                [self openLeftPanel];
-        }
-        else if ([self sideDisplayed] == MSSPSideDisplayedRight)
-        {
-            if ([[self centerView] frame].origin.x >= - (NSInteger)[self rightPanelMaximumWidth] / 2)
-                [self closePanel];
-            else
-                [self openRightPanel];
-        }
-        else
-            [self closePanel];
+      if ([[self centerView] frame].origin.x <= [self leftPanelMaximumWidth] / 2)
+        [self closePanel];
+      else
+        [self openLeftPanel];
     }
+    else if ([self sideDisplayed] == MSSPSideDisplayedRight)
+    {
+      if ([[self centerView] frame].origin.x >= - (NSInteger)[self rightPanelMaximumWidth] / 2)
+        [self closePanel];
+      else
+        [self openRightPanel];
+    }
+    else
+      [self closePanel];
+  }
 }
 
 /**
@@ -1237,46 +1246,46 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)panGestureVerifyAuthorizationForNewCenterViewFrame:(CGRect *)newCenterViewFrame
 {
-    if ([self leftPanelController] && newCenterViewFrame->origin.x > [self leftPanelMaximumWidth])
-        newCenterViewFrame->origin.x = [self leftPanelMaximumWidth];
-    else if (![self leftPanelController] && newCenterViewFrame->origin.x > 0)
-        newCenterViewFrame->origin.x = 0;
+  if ([self leftPanelController] && newCenterViewFrame->origin.x > [self leftPanelMaximumWidth])
+    newCenterViewFrame->origin.x = [self leftPanelMaximumWidth];
+  else if (![self leftPanelController] && newCenterViewFrame->origin.x > 0)
+    newCenterViewFrame->origin.x = 0;
+  
+  if ([self rightPanelController] && newCenterViewFrame->origin.x < - (NSInteger)[self rightPanelMaximumWidth])
+    newCenterViewFrame->origin.x = - (NSInteger)[self rightPanelMaximumWidth];
+  else if (![self rightPanelController] && newCenterViewFrame->origin.x < 0)
+    newCenterViewFrame->origin.x = 0;
+  
+  if ([[self centerView] frame].origin.x <= 0 && newCenterViewFrame->origin.x > 0)
+  {
+    if ([[self delegate] respondsToSelector:@selector(slidingPanelController:hasClosedSide:)])
+      [[self delegate] slidingPanelController:self hasClosedSide:[self sideDisplayed]];
     
-    if ([self rightPanelController] && newCenterViewFrame->origin.x < - (NSInteger)[self rightPanelMaximumWidth])
-        newCenterViewFrame->origin.x = - (NSInteger)[self rightPanelMaximumWidth];
-    else if (![self rightPanelController] && newCenterViewFrame->origin.x < 0)
-        newCenterViewFrame->origin.x = 0;
-    
-    if ([[self centerView] frame].origin.x <= 0 && newCenterViewFrame->origin.x > 0)
-    {   
-        if ([self sideDisplayed] != MSSPSideDisplayedNone && [[self delegate] respondsToSelector:@selector(slidingPanelController:hasClosedSide:)])
-            [[self delegate] slidingPanelController:self hasClosedSide:[self sideDisplayed]];
-        
-        if (!([self leftPanelOpenGestureMode] & [self panTouchLocation]))
-            newCenterViewFrame->origin.x = 0;
-        else
-        {
-            [self loadLeftPanel];
-            
-            if ([[self delegate] respondsToSelector:@selector(slidingPanelController:beginsToBringOutSide:)])
-                [[self delegate] slidingPanelController:self beginsToBringOutSide:[self sideDisplayed]];
-        }
-    }
-    else if ([[self centerView] frame].origin.x >= 0 && newCenterViewFrame->origin.x < 0)
+    if (!([self leftPanelOpenGestureMode] & [self panTouchLocation]))
+      newCenterViewFrame->origin.x = 0;
+    else
     {
-        if ([self sideDisplayed] != MSSPSideDisplayedNone && [[self delegate] respondsToSelector:@selector(slidingPanelController:hasClosedSide:)])
-            [[self delegate] slidingPanelController:self hasClosedSide:[self sideDisplayed]];
-        
-        if (!([self rightPanelOpenGestureMode] & [self panTouchLocation]))
-            newCenterViewFrame->origin.x = 0;
-        else
-        {
-            [self loadRightPanel];
-            
-            if ([[self delegate] respondsToSelector:@selector(slidingPanelController:beginsToBringOutSide:)])
-                [[self delegate] slidingPanelController:self beginsToBringOutSide:[self sideDisplayed]];
-        }
+      [self loadLeftPanel];
+      
+      if ([[self delegate] respondsToSelector:@selector(slidingPanelController:beginsToBringOutSide:)])
+        [[self delegate] slidingPanelController:self beginsToBringOutSide:[self sideDisplayed]];
     }
+  }
+  else if ([[self centerView] frame].origin.x >= 0 && newCenterViewFrame->origin.x < 0)
+  {
+    if ([[self delegate] respondsToSelector:@selector(slidingPanelController:hasClosedSide:)])
+      [[self delegate] slidingPanelController:self hasClosedSide:[self sideDisplayed]];
+    
+    if (!([self rightPanelOpenGestureMode] & [self panTouchLocation]))
+      newCenterViewFrame->origin.x = 0;
+    else
+    {
+      [self loadRightPanel];
+      
+      if ([[self delegate] respondsToSelector:@selector(slidingPanelController:beginsToBringOutSide:)])
+        [[self delegate] slidingPanelController:self beginsToBringOutSide:[self sideDisplayed]];
+    }
+  }
 }
 
 /**
@@ -1284,24 +1293,24 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)setGestureRecognizers
 {
-    if (![self panGestureRecognizer])
-    {
-        [self setPanGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)]];
-        [[self panGestureRecognizer] setDelegate:self];
-        [[self panGestureRecognizer] setMinimumNumberOfTouches:1];
-        [[self panGestureRecognizer] setMaximumNumberOfTouches:1];
-    }
-    
-    if (![self tapGestureRecognizer])
-    {
-        [self setTapGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognized:)]];
-        [[self tapGestureRecognizer] setDelegate:self];
-        [[self tapGestureRecognizer] setNumberOfTapsRequired:1];
-        [[self tapGestureRecognizer] setNumberOfTouchesRequired:1];
-    }
-    
-    [[self view] addGestureRecognizer:[self panGestureRecognizer]];
-    [[self view] addGestureRecognizer:[self tapGestureRecognizer]];
+  if (![self panGestureRecognizer])
+  {
+    [self setPanGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)]];
+    [[self panGestureRecognizer] setDelegate:self];
+    [[self panGestureRecognizer] setMinimumNumberOfTouches:1];
+    [[self panGestureRecognizer] setMaximumNumberOfTouches:1];
+  }
+  
+  if (![self tapGestureRecognizer])
+  {
+    [self setTapGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognized:)]];
+    [[self tapGestureRecognizer] setDelegate:self];
+    [[self tapGestureRecognizer] setNumberOfTapsRequired:1];
+    [[self tapGestureRecognizer] setNumberOfTouchesRequired:1];
+  }
+  
+  [[self view] addGestureRecognizer:[self panGestureRecognizer]];
+  [[self view] addGestureRecognizer:[self tapGestureRecognizer]];
 }
 
 /**
@@ -1311,7 +1320,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)tapGestureRecognized:(UITapGestureRecognizer *)__unused tapGestureRecognizer
 {
-    [self closePanel];
+  [self closePanel];
 }
 
 #pragma mark Load and unload panels
@@ -1322,7 +1331,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)loadLeftPanel
 {
-    [self loadPanelForSide:MSSPSideDisplayedLeft];
+  [self loadPanelForSide:MSSPSideDisplayedLeft];
 }
 
 /**
@@ -1332,30 +1341,42 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)loadPanelForSide:(MSSPSideDisplayed)side
 {
-    if (side == MSSPSideDisplayedNone)
-        return ;
-    
-    if (![self panelControllerForSide:side] || [self sideDisplayed] == side)
-        return ;
-    
-    if ([self sideDisplayed] != MSSPSideDisplayedNone)
-        [self unloadPanelForSide:[self sideDisplayed]];
-    
-    if (side == MSSPSideDisplayedLeft)
-    {
-        [[[self leftPanelController] view] setFrame:CGRectMake(0, 0, [self leftPanelMaximumWidth], [[self view] bounds].size.height)];
-        [[[self leftPanelController] view] setAutoresizingMask:(UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin)];
-    }
-    else
-    {
-        [[[self rightPanelController] view] setFrame:CGRectMake([[self view] bounds].size.width - [self rightPanelMaximumWidth], 0, [self rightPanelMaximumWidth], [[self view] bounds].size.height)];
-        [[[self rightPanelController] view] setAutoresizingMask:(UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin)];
-    }
-    
-    [[self view] addSubview:[[self panelControllerForSide:side] view]];
-    [[self view] sendSubviewToBack:[[self panelControllerForSide:side] view]];
-    
-    [self setSideDisplayed:side];
+  UIViewController    *controller;
+  CGRect              frame;
+  
+  if (side == MSSPSideDisplayedNone)
+    return ;
+  
+  if (![self panelControllerForSide:side] || [self sideDisplayed] == side)
+    return ;
+  
+  if ([self sideDisplayed] != MSSPSideDisplayedNone)
+    [self unloadPanelForSide:[self sideDisplayed]];
+  
+  if (side == MSSPSideDisplayedLeft)
+  {
+    [[[self leftPanelController] view] setFrame:CGRectMake(0, 0, [self leftPanelMaximumWidth], [[self view] bounds].size.height)];
+    [[[self leftPanelController] view] setAutoresizingMask:(UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin)];
+  }
+  else
+  {
+    [[[self rightPanelController] view] setFrame:CGRectMake([[self view] bounds].size.width - [self rightPanelMaximumWidth], 0, [self rightPanelMaximumWidth], [[self view] bounds].size.height)];
+    [[[self rightPanelController] view] setAutoresizingMask:(UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin)];
+  }
+  
+  [[self view] addSubview:[[self panelControllerForSide:side] view]];
+  [[self view] sendSubviewToBack:[[self panelControllerForSide:side] view]];
+  
+  if ([[self parentViewController] isKindOfClass:[UITabBarController class]] &&
+      [controller isKindOfClass:[UINavigationController class]] &&
+      ![[(UITabBarController *)[self parentViewController] tabBar] isTranslucent])
+  {
+    frame = [[controller view] frame];
+    frame.size.height += [[(UITabBarController *)[self parentViewController] tabBar] frame].size.height;
+    [[controller view] setFrame:frame];
+  }
+  
+  [self setSideDisplayed:side];
 }
 
 /**
@@ -1363,7 +1384,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)loadRightPanel
 {
-    [self loadPanelForSide:MSSPSideDisplayedRight];
+  [self loadPanelForSide:MSSPSideDisplayedRight];
 }
 
 /**
@@ -1371,7 +1392,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)unloadLeftPanel
 {
-    [self unloadPanelForSide:MSSPSideDisplayedLeft];
+  [self unloadPanelForSide:MSSPSideDisplayedLeft];
 }
 
 /**
@@ -1381,15 +1402,15 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)unloadPanelForSide:(MSSPSideDisplayed)side
 {
-    if (side == MSSPSideDisplayedNone)
-        return ;
-    
-    if (![self panelControllerForSide:side] || [self sideDisplayed] != side)
-        return ;
-    
-    [[[self panelControllerForSide:side] view] removeFromSuperview];
-    
-    [self setSideDisplayed:MSSPSideDisplayedNone];
+  if (side == MSSPSideDisplayedNone)
+    return ;
+  
+  if (![self panelControllerForSide:side] || [self sideDisplayed] != side)
+    return ;
+  
+  [[[self panelControllerForSide:side] view] removeFromSuperview];
+  
+  [self setSideDisplayed:MSSPSideDisplayedNone];
 }
 
 /**
@@ -1397,7 +1418,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)unloadRightPanel
 {
-    [self unloadPanelForSide:MSSPSideDisplayedRight];
+  [self unloadPanelForSide:MSSPSideDisplayedRight];
 }
 
 #pragma mark Actions
@@ -1408,7 +1429,12 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)closePanel
 {
-    [self closePanelWithCompletion:nil];
+  [self closePanelWithCompletion:nil animated:YES];
+}
+
+- (void)closePanelAnimated:(BOOL)animated
+{
+  [self closePanelWithCompletion:nil animated:animated];
 }
 
 /**
@@ -1416,47 +1442,57 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  *
  *  @param completion A block object to be executed when the panel is closed.
  */
-- (void)closePanelWithCompletion:(void (^)(void))completion
+- (void)closePanelWithCompletion:(void (^)(void))completion animated:(BOOL)animated
 {
-    void    (^animationBlock)(void);
-    CGFloat animationLength;
-    CGSize  centerViewSize;
-    void    (^completionBlock)(BOOL);
+  void    (^animationBlock)(void);
+  CGFloat animationLength;
+  CGSize  centerViewSize;
+  void    (^completionBlock)(BOOL);
+  
+  if (![self centerViewController] || [self sideDisplayed] == MSSPSideDisplayedNone)
+  {
+    if (completion)
+      completion();
+    return ;
+  }
+  
+  centerViewSize = [[self centerView] frame].size;
+  
+  animationBlock = ^()
+  {
+    if ([self statusBarDisplayedSmoothlyForSide:[self sideDisplayed]])
+      [[self statusBarView] setBackgroundColor:[self statusBarColorForSide:MSSPSideDisplayedNone]];
     
-    if (![self centerViewController] || [self sideDisplayed] == MSSPSideDisplayedNone)
-        return ;
-    
-    centerViewSize = [[self centerView] frame].size;
-
-    animationBlock = ^()
+    [[self centerView] setFrame:CGRectMake(0, 0, centerViewSize.width, centerViewSize.height)];
+  };
+  
+  completionBlock = ^(BOOL finished)
+  {
+    if (finished)
     {
-        if ([self statusBarDisplayedSmoothlyForSide:[self sideDisplayed]])
-            [[self statusBarView] setBackgroundColor:[self statusBarColorForSide:MSSPSideDisplayedNone]];
-        
-        [[self centerView] setFrame:CGRectMake(0, 0, centerViewSize.width, centerViewSize.height)];
-    };
-    
-    completionBlock = ^(BOOL finished)
-    {
-        if (finished)
-        {
-            if ([[self delegate] respondsToSelector:@selector(slidingPanelController:hasClosedSide:)])
-                [[self delegate] slidingPanelController:self hasClosedSide:[self sideDisplayed]];
-            
-            [self unloadPanelForSide:[self sideDisplayed]];
-            [self adjustStatusBarColor];
-            
-            if (completion)
-                completion();
-        }
-    };
-    
-    if ([self sideDisplayed] == MSSPSideDisplayedLeft)
-        animationLength = [[self centerView] frame].origin.x;
-    else
-        animationLength = -[[self centerView] frame].origin.x;
-    
+      if ([[self delegate] respondsToSelector:@selector(slidingPanelController:hasClosedSide:)])
+        [[self delegate] slidingPanelController:self hasClosedSide:[self sideDisplayed]];
+      
+      [self unloadPanelForSide:[self sideDisplayed]];
+      [self adjustStatusBarColor];
+      
+      if (completion)
+        completion();
+    }
+  };
+  
+  if ([self sideDisplayed] == MSSPSideDisplayedLeft)
+    animationLength = [[self centerView] frame].origin.x;
+  else
+    animationLength = -[[self centerView] frame].origin.x;
+  
+  if (animated)
     [UIView animateWithDuration:[self animationDurationForLength:animationLength] animations:animationBlock completion:completionBlock];
+  else
+  {
+    animationBlock();
+    completionBlock(YES);
+  }
 }
 
 /**
@@ -1464,7 +1500,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)openLeftPanel
 {
-    [self openLeftPanelWithCompletion:nil];
+  [self openLeftPanelWithCompletion:nil];
 }
 
 /**
@@ -1474,7 +1510,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)openLeftPanelWithCompletion:(void (^)(void))completion
 {
-    [self openPanelSide:MSSPSideDisplayedLeft withCompletion:completion];
+  [self openPanelSide:MSSPSideDisplayedLeft withCompletion:completion];
 }
 
 /**
@@ -1485,7 +1521,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)openPanelSide:(MSSPSideDisplayed)side withCompletion:(void (^)(void))completion
 {
-    [self openPanelSide:side withCompletion:completion andStatusBarColorUpdate:YES];
+  [self openPanelSide:side withCompletion:completion andStatusBarColorUpdate:YES];
 }
 
 /**
@@ -1497,82 +1533,82 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)openPanelSide:(MSSPSideDisplayed)side withCompletion:(void (^)(void))completion andStatusBarColorUpdate:(BOOL)statusBarColorUpdate
 {
-    void                (^animationBlock)(void);
-    CGSize              centerViewSize;
-    void                (^completionBlock)(BOOL);
-    void                (^openPanelBlock)();
-    UIViewController    *panelController;
- 
-    NSParameterAssert(side != MSSPSideDisplayedNone);
+  void                (^animationBlock)(void);
+  CGSize              centerViewSize;
+  void                (^completionBlock)(BOOL);
+  void                (^openPanelBlock)();
+  UIViewController    *panelController;
+  
+  NSParameterAssert(side != MSSPSideDisplayedNone);
+  
+  if (!(panelController = [self panelControllerForSide:side]))
+    return ;
+  
+  centerViewSize = [[self centerView] frame].size;
+  
+  animationBlock = ^()
+  {
+    CGRect  frame;
+    CGFloat x;
     
-    if (!(panelController = [self panelControllerForSide:side]))
-        return ;
+    if ([self statusBarDisplayedSmoothlyForSide:side])
+      [[self statusBarView] setBackgroundColor:[self statusBarColorForSide:side]];
     
-    centerViewSize = [[self centerView] frame].size;
-    
-    animationBlock = ^()
+    if ([[panelController view] frame].size.width != [self panelMaximumWithForSide:side])
     {
-        CGRect  frame;
-        CGFloat x;
-        
-        if ([self statusBarDisplayedSmoothlyForSide:side])
-            [[self statusBarView] setBackgroundColor:[self statusBarColorForSide:side]];
-        
-        if ([[panelController view] frame].size.width != [self panelMaximumWithForSide:side])
-        {
-            frame = [[panelController view] frame];
-            frame.size.width = [self panelMaximumWithForSide:side];
-            
-            if (side == MSSPSideDisplayedRight)
-                frame.origin.x = [[self centerView] frame].size.width - [self panelMaximumWithForSide:side];
-                
-            [[panelController view] setFrame:frame];
-        }
-        
-        if (side == MSSPSideDisplayedLeft)
-            x = [self panelMaximumWithForSide:side];
-        else
-            x = - (CGFloat)[self panelMaximumWithForSide:side];
-        
-        [[self centerView] setFrame:CGRectMake(x, 0, centerViewSize.width, centerViewSize.height)];
-    };
+      frame = [[panelController view] frame];
+      frame.size.width = [self panelMaximumWithForSide:side];
+      
+      if (side == MSSPSideDisplayedRight)
+        frame.origin.x = [[self centerView] frame].size.width - [self panelMaximumWithForSide:side];
+      
+      [[panelController view] setFrame:frame];
+    }
     
-    completionBlock = ^(BOOL finished)
-    {
-        if (finished)
-        {
-            if ([[self delegate] respondsToSelector:@selector(slidingPanelController:hasOpenedSide:)])
-                [[self delegate] slidingPanelController:self hasOpenedSide:side];
-            
-            if (completion)
-                completion();
-        }
-    };
-    
-    openPanelBlock = ^()
-    {
-        CGFloat animationLength;
-        
-        [self loadPanelForSide:side];
-        
-        if (statusBarColorUpdate)
-            [self adjustStatusBarColor];
-        
-        if ([[self centerView] frame].origin.x == 0 && [[self delegate] respondsToSelector:@selector(slidingPanelController:beginsToBringOutSide:)])
-            [[self delegate] slidingPanelController:self beginsToBringOutSide:side];
-        
-        if (side == MSSPSideDisplayedLeft)
-            animationLength = [self leftPanelMaximumWidth] - [[self centerView] frame].origin.x;
-        else
-            animationLength = [self rightPanelMaximumWidth] + [[self centerView] frame].origin.x;
-        
-        [UIView animateWithDuration:[self animationDurationForLength:animationLength] animations:animationBlock completion:completionBlock];
-    };
-    
-    if ([self sideDisplayed] != MSSPSideDisplayedNone && [self sideDisplayed] != side)
-        [self closePanelWithCompletion:openPanelBlock];
+    if (side == MSSPSideDisplayedLeft)
+      x = [self panelMaximumWithForSide:side];
     else
-        openPanelBlock();
+      x = - (CGFloat)[self panelMaximumWithForSide:side];
+    
+    [[self centerView] setFrame:CGRectMake(x, 0, centerViewSize.width, centerViewSize.height)];
+  };
+  
+  completionBlock = ^(BOOL finished)
+  {
+    if (finished)
+    {
+      if ([[self delegate] respondsToSelector:@selector(slidingPanelController:hasOpenedSide:)])
+        [[self delegate] slidingPanelController:self hasOpenedSide:side];
+      
+      if (completion)
+        completion();
+    }
+  };
+  
+  openPanelBlock = ^()
+  {
+    CGFloat animationLength;
+    
+    [self loadPanelForSide:side];
+    
+    if (statusBarColorUpdate)
+      [self adjustStatusBarColor];
+    
+    if ([[self centerView] frame].origin.x == 0 && [[self delegate] respondsToSelector:@selector(slidingPanelController:beginsToBringOutSide:)])
+      [[self delegate] slidingPanelController:self beginsToBringOutSide:side];
+    
+    if (side == MSSPSideDisplayedLeft)
+      animationLength = [self leftPanelMaximumWidth] - [[self centerView] frame].origin.x;
+    else
+      animationLength = [self rightPanelMaximumWidth] + [[self centerView] frame].origin.x;
+    
+    [UIView animateWithDuration:[self animationDurationForLength:animationLength] animations:animationBlock completion:completionBlock];
+  };
+  
+  if ([self sideDisplayed] != MSSPSideDisplayedNone && [self sideDisplayed] != side)
+    [self closePanelWithCompletion:openPanelBlock animated:YES];
+  else
+    openPanelBlock();
 }
 
 /**
@@ -1580,7 +1616,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)openRightPanel
 {
-    [self openRightPanelWithCompletion:nil];
+  [self openRightPanelWithCompletion:nil];
 }
 
 /**
@@ -1590,7 +1626,7 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)openRightPanelWithCompletion:(void (^)(void))completion
 {
-    [self openPanelSide:MSSPSideDisplayedRight withCompletion:completion];
+  [self openPanelSide:MSSPSideDisplayedRight withCompletion:completion];
 }
 
 #pragma mark Storyboard
@@ -1604,12 +1640,12 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)__unused sender
 {
-    if ([segue.identifier isEqualToString:MSSPStoryboardIDCenter])
-        [self setCenterViewController:[segue destinationViewController]];
-    else if ([segue.identifier isEqualToString:MSSPStoryboardIDLeft])
-        [self setLeftPanelController:[segue destinationViewController]];
-    else if ([segue.identifier isEqualToString:MSSPStoryboardIDRight])
-        [self setRightPanelController:[segue destinationViewController]];
+  if ([segue.identifier isEqualToString:MSSPStoryboardIDCenter])
+    [self setCenterViewController:[segue destinationViewController]];
+  else if ([segue.identifier isEqualToString:MSSPStoryboardIDLeft])
+    [self setLeftPanelController:[segue destinationViewController]];
+  else if ([segue.identifier isEqualToString:MSSPStoryboardIDRight])
+    [self setRightPanelController:[segue destinationViewController]];
 }
 
 /**
@@ -1617,23 +1653,23 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
  */
 - (void)setViewsFromStoryboard
 {
-    @try
-    {
-        [self performSegueWithIdentifier:MSSPStoryboardIDCenter sender:nil];
-    }
-    @catch (NSException *exception){}
-    
-    @try
-    {
-        [self performSegueWithIdentifier:MSSPStoryboardIDLeft sender:nil];
-    }
-    @catch (NSException *exception){}
-    
-    @try
-    {
-        [self performSegueWithIdentifier:MSSPStoryboardIDRight sender:nil];
-    }
-    @catch (NSException *exception){}
+  @try
+  {
+    [self performSegueWithIdentifier:MSSPStoryboardIDCenter sender:nil];
+  }
+  @catch (NSException *exception){}
+  
+  @try
+  {
+    [self performSegueWithIdentifier:MSSPStoryboardIDLeft sender:nil];
+  }
+  @catch (NSException *exception){}
+  
+  @try
+  {
+    [self performSegueWithIdentifier:MSSPStoryboardIDRight sender:nil];
+  }
+  @catch (NSException *exception){}
 }
 
 @end
